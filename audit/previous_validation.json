@@ -1,0 +1,182 @@
+{
+  "status": "runnable_port_validated_not_converged",
+  "robot": "Unitree G1 29 DoF torso-base with shoes",
+  "isaaclab": "3.0.0",
+  "backend": "newton_mjwarp",
+  "task": "Hiking-G1-AMP-v0",
+  "smoke": {
+    "mode": "smoke",
+    "steps": 200,
+    "num_envs": 16,
+    "finite_observations": true,
+    "failure_resets": 53,
+    "amp_shape": [
+      16,
+      670
+    ],
+    "depth_min": 0.16626153886318207,
+    "depth_max": 0.9999999403953552,
+    "edge_count": 9250,
+    "root_height_mean": 0.7332501411437988,
+    "fixed_base": false
+  },
+  "training": {
+    "mode": "train",
+    "iterations": 100,
+    "num_envs": 256,
+    "seconds": 85.1868052679929,
+    "start_iteration": 0,
+    "end_iteration": 100,
+    "discriminator_updated": true,
+    "finite_parameters": true,
+    "note": "Pipeline validation; not a converged parkour policy."
+  },
+  "resume": {
+    "mode": "train",
+    "iterations": 2,
+    "num_envs": 32,
+    "seconds": 6.382975526008522,
+    "start_iteration": 100,
+    "end_iteration": 102,
+    "discriminator_updated": true,
+    "finite_parameters": true,
+    "note": "Pipeline validation; not a converged parkour policy."
+  },
+  "playback": {
+    "mode": "play",
+    "steps": 400,
+    "num_envs": 1,
+    "finite_observations": true,
+    "failure_resets": 66,
+    "amp_shape": [
+      1,
+      670
+    ],
+    "depth_min": 0.18195167183876038,
+    "depth_max": 0.9999999403953552,
+    "edge_count": 9250,
+    "root_height_mean": 0.8920717239379883,
+    "fixed_base": false
+  },
+  "scalars": {
+    "all_scalars_finite": true,
+    "tag_count": 66,
+    "metrics": {
+      "Loss/surrogate_loss": {
+        "count": 100,
+        "last": -0.028042316436767578
+      },
+      "Loss/value_loss": {
+        "count": 100,
+        "last": 0.0890636071562767
+      },
+      "Loss/entropy": {
+        "count": 100,
+        "last": -40.52499008178711
+      },
+      "Loss/total_loss": {
+        "count": 100,
+        "last": -0.1821286678314209
+      },
+      "Loss/discriminator_loss": {
+        "count": 100,
+        "last": 0.22877240180969238
+      },
+      "Loss/discriminator_gradient_penalty": {
+        "count": 100,
+        "last": 0.017047196626663208
+      },
+      "Loss/discriminator_weight_decay": {
+        "count": 100,
+        "last": 79.36279296875
+      },
+      "Loss/logit_weight_decay": {
+        "count": 100,
+        "last": 0.011092777363955975
+      },
+      "Loss/amp_total_loss": {
+        "count": 100,
+        "last": 0.34891000390052795
+      },
+      "Loss/learning_rate": {
+        "count": 100,
+        "last": 7.593750342493877e-05
+      },
+      "Train/mean_episode_length": {
+        "count": 100,
+        "last": 6.21999979019165
+      },
+      "Train/median_episode_length": {
+        "count": 100,
+        "last": 6.0
+      },
+      "Train/min_episode_length": {
+        "count": 100,
+        "last": 6.0
+      },
+      "Train/max_episode_length": {
+        "count": 100,
+        "last": 8.0
+      },
+      "Train/time/mean_episode_length": {
+        "count": 100,
+        "last": 6.21999979019165
+      }
+    }
+  },
+  "motion": {
+    "path": "/home/ye/Desktop/HikingLab3/data/official/data&model/parkour_motion_reference/parkour_motion_without_run_retargetted.npz",
+    "sha256": "7cfb7c1dcaa6f2a55a13c4849be9e17b4c960ce4015c500ac0ddfb9d77f4ba5b",
+    "frames": 18982,
+    "fps": 50.0,
+    "joint_names": [
+      "left_shoulder_pitch_joint",
+      "left_shoulder_roll_joint",
+      "left_shoulder_yaw_joint",
+      "left_elbow_joint",
+      "left_wrist_roll_joint",
+      "left_wrist_pitch_joint",
+      "left_wrist_yaw_joint",
+      "right_shoulder_pitch_joint",
+      "right_shoulder_roll_joint",
+      "right_shoulder_yaw_joint",
+      "right_elbow_joint",
+      "right_wrist_roll_joint",
+      "right_wrist_pitch_joint",
+      "right_wrist_yaw_joint",
+      "waist_pitch_joint",
+      "waist_roll_joint",
+      "waist_yaw_joint",
+      "left_hip_pitch_joint",
+      "left_hip_roll_joint",
+      "left_hip_yaw_joint",
+      "left_knee_joint",
+      "left_ankle_pitch_joint",
+      "left_ankle_roll_joint",
+      "right_hip_pitch_joint",
+      "right_hip_roll_joint",
+      "right_hip_yaw_joint",
+      "right_knee_joint",
+      "right_ankle_pitch_joint",
+      "right_ankle_roll_joint"
+    ],
+    "quaternion_source": "wxyz",
+    "quaternion_runtime": "xyzw",
+    "valid_windows": 18482,
+    "window_frames": 10
+  },
+  "unit_tests": {
+    "passed": 3,
+    "log": "logs/unit-tests.log"
+  },
+  "checkpoint": "/home/ye/Desktop/HikingLab3/logs/final-train/model_100.pt",
+  "video": "/home/ye/Desktop/HikingLab3/artifacts/G1_HikingLab3_\u79fb\u690d\u94fe\u8def\u9a8c\u8bc1_\u672a\u6536\u655b.mp4",
+  "limitations": [
+    "Short integration training only; not converged.",
+    "No real robot or sim-to-real validation.",
+    "Newton backend is not numerically equivalent to upstream PhysX.",
+    "Official ONNX import not validated.",
+    "Short validation uses 2x20 terrain tiles; full 10x20 curriculum not trained."
+  ],
+  "invalid_debug_runs": "logs/INVALID_EARLY_CHECKPOINTS.txt"
+}

@@ -1,0 +1,21 @@
+from pathlib import Path
+import ast,shutil
+r=Path(__file__).resolve().parents[1]; s=r/'vendor/InstinctLab/source/instinctlab/instinctlab'; d=r/'hikinglab3'
+shutil.copy(s/'utils/perlin.py',d/'perlin.py');shutil.copy(s/'utils/warp/kernels.py',d/'kernels.py')
+p=d/'terrains/height_field/hf_terrains.py';p.write_text(p.read_text().replace('instinctlab.utils.perlin','hikinglab3.perlin'))
+p=d/'motors.py';p.write_text(p.read_text().replace('effort_limit','joint_effort_limit').replace('velocity_limit','joint_velocity_limit'))
+source=(s/'tasks/parkour/config/parkour_env_cfg.py').read_text();tree=ast.parse(source)
+keep=['ActionsCfg','CommandsCfg','G1Rewards','TerminationsCfg','EventCfg','CurriculumCfg']
+parts=[]
+for n in tree.body:
+ if isinstance(n,ast.ClassDef) and n.name in keep:
+  if n.name=='TerminationsCfg':n.body=[x for x in n.body if not (isinstance(x,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='dataset_exhausted' for t in x.targets))]
+  if n.name=='EventCfg':n.body=[x for x in n.body if not (isinstance(x,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='register_virtual_obstacles' for t in x.targets))]
+  parts.append(ast.unparse(n))
+(d/'task_terms_cfg.py').write_text('''# Derived from InstinctLab parkour config (CC-BY-NC-4.0).
+import math
+from isaaclab.utils import configclass
+from isaaclab.managers import SceneEntityCfg, RewardTermCfg as RewTerm, TerminationTermCfg as DoneTerm, EventTermCfg as EventTerm, CurriculumTermCfg as CurrTerm
+from . import mdp
+from .motors import beyondmimic_action_scale
+'''+ '\n\n'.join(parts)+'\n')

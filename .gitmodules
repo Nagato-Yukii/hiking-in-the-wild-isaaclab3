@@ -1,0 +1,3 @@
+[submodule "vendor/InstinctLab"]
+	path = vendor/InstinctLab
+	url = https://github.com/Nagato-Yukii/agibot_x2_hiking_in_the_wild.git

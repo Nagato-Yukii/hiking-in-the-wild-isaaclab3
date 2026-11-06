@@ -1,0 +1,8 @@
+{
+  "frames": 18982,
+  "seam_frames": 49,
+  "candidate_windows": 18972,
+  "excluded_windows": 490,
+  "valid_windows": 18482,
+  "note": "Matches local MotionDataset threshold logic; not proof of original motion clip boundaries."
+}

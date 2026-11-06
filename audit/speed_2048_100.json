@@ -1,0 +1,35 @@
+{
+  "runs": {
+    "newton": {
+      "num_envs": 2048,
+      "updates": 100,
+      "transitions": 4915200,
+      "warmup_updates_omitted": 10,
+      "steady_mean_update_s": 3.0641333333333334,
+      "steady_aggregate_transitions_per_s": 16041.077411774944,
+      "mean_collection_s": 2.0681666666666665,
+      "mean_learning_s": 0.9959666666666667,
+      "all_100_logged_collection_learning_s": 343.597,
+      "process_wall_s": 404.6467109879886,
+      "sampled_device_peak_gib": 11.1103515625,
+      "log_directory": "logs/speed-20261104-newton-2048-100"
+    },
+    "physx": {
+      "num_envs": 2048,
+      "updates": 100,
+      "transitions": 4915200,
+      "warmup_updates_omitted": 10,
+      "steady_mean_update_s": 4.361122222222222,
+      "steady_aggregate_transitions_per_s": 11270.49357836031,
+      "mean_collection_s": 3.5247777777777776,
+      "mean_learning_s": 0.8363444444444444,
+      "all_100_logged_collection_learning_s": 437.20799999999997,
+      "process_wall_s": 522.6766845050006,
+      "sampled_device_peak_gib": 14.138671875,
+      "log_directory": "logs/speed-20261104-physx-2048-100-r3"
+    }
+  },
+  "newton_throughput_ratio": 1.423280826189751,
+  "newton_steady_time_reduction_fraction": 0.2973979684128193,
+  "scope": "Full local training stacks, not isolated physics engine; sequential runs, seed42, no video, 10x20 terrain, same official AMP NPZ. PhysX CLI fixes missing data path and invalid G1 head joint regex; original source files unchanged."
+}

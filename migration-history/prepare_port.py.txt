@@ -1,0 +1,43 @@
+"""One-time, auditable extraction of the parkour-specific upstream components."""
+from pathlib import Path
+import ast, shutil, re
+root=Path(__file__).resolve().parents[1]; src=root/'vendor/InstinctLab/source/instinctlab/instinctlab'; dst=root/'hikinglab3'; dst.mkdir(exist_ok=True)
+header='# Derived from Project-Instinct / InstinctLab (CC-BY-NC-4.0).\n# Isaac Lab 3.0 migration; see THIRD_PARTY.md for provenance.\n'
+(dst/'__init__.py').write_text('')
+for name in ['height_field','trimesh']:
+ shutil.copytree(src/'terrains'/name,dst/'terrains'/name,dirs_exist_ok=True)
+(dst/'terrains/__init__.py').write_text('from .height_field.hf_terrains_cfg import *\nfrom .trimesh.mesh_terrains_cfg import *\n')
+for p in (dst/'terrains').rglob('*.py'):
+ s=p.read_text().replace('instinctlab.terrains','hikinglab3.terrains');p.write_text(header+s)
+# Extract the original terrain curriculum without importing the old scene/sensor stack.
+s=(src/'tasks/parkour/config/parkour_env_cfg.py').read_text(); tree=ast.parse(s)
+node=next(n for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='ROUGH_TERRAINS_CFG' for t in n.targets))
+(dst/'terrain_cfg.py').write_text(header+'from isaaclab.terrains import TerrainGeneratorCfg, FlatPatchSamplingCfg\nimport hikinglab3.terrains as terrain_gen\n'+ast.get_source_segment(s,node)+'\n')
+# Retain the exact motor gains and action scales, with 3.0 names.
+s=(src/'assets/unitree_g1.py').read_text(); motor=s[s.index('ARMATURE_5020'):s.index('G1_29DOF_TORSOBASE_POPSICLE_CFG =')]
+motor=motor.replace('effort_limit_sim','effort_limit').replace('velocity_limit_sim','velocity_limit')
+# Use the explicitly supported delayed PD path; limits are actuator-side too.
+(dst/'motors.py').write_text(header+'from isaaclab.actuators import ImplicitActuatorCfg, DelayedPDActuatorCfg\n'+motor)
+# Core task terms: references to 3.0 ProxyArrays must be explicit torch views.
+(dst/'mdp').mkdir(exist_ok=True)
+for name in ['rewards','curriculums','terminations']:
+ s=(src/f'tasks/parkour/mdp/{name}.py').read_text()
+ s=re.sub(r'(\.data\.[a-zA-Z_][a-zA-Z_0-9]*)(?![a-zA-Z_0-9])',r'\1.torch',s)
+ s=s.replace('net_forces_w','net_normal_forces_w')
+ (dst/f'mdp/{name}.py').write_text(header+s)
+shutil.copytree(src/'tasks/parkour/mdp/commands',dst/'mdp/commands',dirs_exist_ok=True)
+for p in (dst/'mdp/commands').glob('*.py'):
+ s=p.read_text();s=re.sub(r'(\.data\.[a-zA-Z_][a-zA-Z_0-9]*)(?![a-zA-Z_0-9])',r'\1.torch',s)
+ p.write_text(header+s)
+# Original generic regularization terms, independent of motion reference sensors.
+s=(src/'envs/mdp/rewards/regularizations.py').read_text()
+s=re.sub(r'(\.data\.[a-zA-Z_][a-zA-Z_0-9]*)(?![a-zA-Z_0-9])',r'\1.torch',s).replace('net_forces_w','net_normal_forces_w')
+(dst/'mdp/regularizations.py').write_text(header+s)
+(dst/'mdp/__init__.py').write_text('from isaaclab.envs.mdp import *\nfrom .regularizations import *\nfrom .rewards import *\nfrom .curriculums import *\nfrom .terminations import *\nfrom .commands import *\n')
+# Edge spatial indexing and greedy segment consolidation are retained verbatim.
+shutil.copy(src/'utils/warp/cylinder.py',dst/'cylinder.py')
+s=(src/'terrains/virtual_obstacle/edge_cylinder.py').read_text()
+segment=s[s.index('class EdgeCylinder('):s.index('class PluckerEdgeCylinder(')].replace('EdgeCylinder(VirtualObstacleBase)','EdgeCylinder')
+greedy=s[s.index('class GreedyconcatEdgeCylinder('):s.index('class RayEdgeCylinder(')]
+(dst/'edges.py').write_text(header+'from __future__ import annotations\nimport numpy as np\nimport torch\nimport random\nimport trimesh\nfrom .cylinder import CylinderSpatialGrid\n'+segment+greedy)
+shutil.copytree('/home/ye/hiking_in_the_wild/instinct_rl',root/'vendor/instinct_rl',dirs_exist_ok=True,ignore=shutil.ignore_patterns('.git','__pycache__'))

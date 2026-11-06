@@ -1,0 +1,57 @@
+{
+  "independent_feature_max_abs_errors": {
+    "projected_gravity": 1.0594875071712195e-07,
+    "joint_pos_rel": 0.0,
+    "joint_vel": 0.0,
+    "base_lin_vel": 1.2126428625691688e-05,
+    "base_ang_vel": 5.1694239147082044e-05
+  },
+  "same_step_all_reset": {
+    "max_error": 1.275105357170105,
+    "cursors_changed": 4
+  },
+  "same_step_partial_reset": {
+    "max_error": 0.9447701573371887,
+    "unreset_cursor_delta": [
+      1,
+      1,
+      1
+    ]
+  },
+  "reference_windows": {
+    "D_mean": 0.3143099844455719,
+    "amp_per_step_mean": 0.21973763406276703,
+    "amp_quantiles": [
+      0.17291900515556335,
+      0.20640571415424347,
+      0.22022750973701477,
+      0.231676384806633,
+      0.24126429855823517
+    ]
+  },
+  "synthetic_static_reference_poses": {
+    "D_mean": 0.22669650614261627,
+    "amp_per_step_mean": 0.21212586760520935,
+    "amp_quantiles": [
+      0.19339925050735474,
+      0.2015576958656311,
+      0.21104960143566132,
+      0.22432608902454376,
+      0.22908146679401398
+    ]
+  },
+  "mesh": {
+    "raw_vertices": 4684137,
+    "clean_vertices": 4631194,
+    "raw_faces": 9246152,
+    "clean_faces": 9245442,
+    "raw_sharp_edges": 339108,
+    "clean_sharp_edges": 338284,
+    "sharp_added": 24,
+    "sharp_removed": 848,
+    "raw_processed_edges": 44851,
+    "clean_processed_edges": 44293,
+    "processed_added": 362,
+    "processed_removed": 926
+  }
+}

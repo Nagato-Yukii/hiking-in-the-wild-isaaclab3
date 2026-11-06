@@ -1,0 +1,9 @@
+{
+  "hikinglab3/motions.py": "d243965180101738fb031bb77b817a5b5846a57859bbe5add8120b8f1d8d8802",
+  "hikinglab3/wrapper.py": "d114a77fc9a0f72f40754ebe5b03ca031055c14202f42f7e40972b7e0dbab2de",
+  "hikinglab3/terrain_importer.py": "10ef9421bebe00811eef961cc72125c3ca840c52463f35d13da84d4f5921952e",
+  "scripts/audit_amp_mesh.py": "42e2e78c39e36b674345ad7e749ffd35f5b459fc9b1d4bd19edd2e867056ce91",
+  "scripts/evaluate_checkpoints.py": "41be839f6843adb5fbb013c9a9246092f2e05c8be21ded556373a95bbf51e599",
+  "tests/test_motion_contract.py": "d81b3cdcf697dbc795ceb2d43a1e0c830d9a06edfad44edee8dd68c0830e0f31",
+  "tests/test_edge_contract.py": "c8c9f629ff29b985ef91bf593f0cb8c5894a1c26255b11c488b5e44a942a9918"
+}

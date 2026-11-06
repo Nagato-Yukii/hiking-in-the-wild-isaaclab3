@@ -1,0 +1,17 @@
+{
+  "parkour_env_cfg.py": {
+    "url": "https://raw.githubusercontent.com/project-instinct/InstinctLab/main/source/instinctlab/instinctlab/tasks/parkour/config/parkour_env_cfg.py",
+    "sha256": "4b6d2b43ad0971a4b69091863d7c7cb931ed3e142d54bbd3956785bd2b681ed7",
+    "matches_vendored": false
+  },
+  "g1/g1_parkour_target_amp_cfg.py": {
+    "url": "https://raw.githubusercontent.com/project-instinct/InstinctLab/main/source/instinctlab/instinctlab/tasks/parkour/config/g1/g1_parkour_target_amp_cfg.py",
+    "sha256": "486085a4515ad0ef3b839155f4e2cfddf29cada4671175b50424fff019b95311",
+    "matches_vendored": true
+  },
+  "g1/agents/instinct_rl_amp_cfg.py": {
+    "url": "https://raw.githubusercontent.com/project-instinct/InstinctLab/main/source/instinctlab/instinctlab/tasks/parkour/config/g1/agents/instinct_rl_amp_cfg.py",
+    "sha256": "9ca18f7cc263c03423ad55212838fbde7a3f3b2e8f4c198dfbcd9bb44f5d39bd",
+    "matches_vendored": true
+  }
+}

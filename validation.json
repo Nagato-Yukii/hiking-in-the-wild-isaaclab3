@@ -1,0 +1,119 @@
+{
+  "status": "experiment_defaults_restored_and_reward_contracts_fixed_learning_verified_not_converged",
+  "task": "Hiking-G1-AMP-v0",
+  "isaaclab": "3.0.0",
+  "backend": "newton_mjwarp",
+  "fixes": [
+    "native actuator speed rating instead of unpopulated legacy soft limit",
+    "normalize Newton gravity for pelvis and foot orientation rewards",
+    "restore official shoe G1 implicit PD",
+    "restore original train and PLAY experiment defaults",
+    "continuous AMP reference history and sagittal mirroring"
+  ],
+  "official_default_environments": 4096,
+  "validation_environments": 256,
+  "training": {
+    "mode": "train",
+    "iterations": 1000,
+    "num_envs": 256,
+    "seconds": 918.2298046290089,
+    "start_iteration": 0,
+    "end_iteration": 1000,
+    "discriminator_updated": true,
+    "finite_parameters": true,
+    "note": "Pipeline validation; not a converged parkour policy."
+  },
+  "training_curve_first_100": {
+    "episode_steps": 51.406499999999994,
+    "reward": 0.8038,
+    "terrain_level": 0.031045,
+    "timeout_fraction": 0.001002,
+    "orientation_failure_fraction": 0.132351,
+    "speed_limit_reward": -7e-06,
+    "pelvis_orientation_reward": -0.016573,
+    "episode_seconds": 1.02813
+  },
+  "training_curve_last_100": {
+    "episode_steps": 446.2314,
+    "reward": 19.8141,
+    "terrain_level": 0.31512799999999996,
+    "timeout_fraction": 0.155254,
+    "orientation_failure_fraction": 0.014282,
+    "speed_limit_reward": -0.001017,
+    "pelvis_orientation_reward": -0.025973000000000003,
+    "episode_seconds": 8.924628
+  },
+  "evaluation_training_settings": {
+    "mode": "play",
+    "steps": 1000,
+    "num_envs": 64,
+    "finite_observations": true,
+    "failure_resets": 80,
+    "termination_counts": {
+      "time_out": 26,
+      "terrain_out_bound": 0,
+      "base_contact": 1,
+      "bad_orientation": 0,
+      "root_height": 79
+    },
+    "completed_episode_mean_seconds": 10.291509433962265,
+    "completed_episode_count": 106,
+    "amp_shape": [
+      64,
+      670
+    ],
+    "depth_min": 0.14943313598632812,
+    "depth_max": 0.899366021156311,
+    "edge_count": 44347,
+    "root_height_mean": 0.8452003002166748,
+    "fixed_base": false
+  },
+  "formal_paper_benchmark_completed": false,
+  "numeric_tests_passed": 5,
+  "design_checks": {
+    "terrain_all_parameters": true,
+    "ActionsCfg": true,
+    "CommandsCfg": true,
+    "G1Rewards": true,
+    "CurriculumCfg": true,
+    "DepthEncoderConv2dCfg": true,
+    "EncoderConfigs": true,
+    "MoEPolicyCfg": true,
+    "AmpAlgoCfg": true,
+    "G1ParkourPPORunnerCfg": true
+  },
+  "audit_document": "audit/\u5b9e\u9a8c\u8bbe\u8ba1\u5bf9\u9f50.md",
+  "old_validation_superseded": "audit/previous_validation.json",
+  "video_original_play_settings": {
+    "mode": "play",
+    "steps": 1000,
+    "num_envs": 10,
+    "finite_observations": true,
+    "failure_resets": 13,
+    "termination_counts": {
+      "time_out": 10,
+      "terrain_out_bound": 0,
+      "base_contact": 0,
+      "bad_orientation": 13
+    },
+    "completed_episode_mean_seconds": 7.6121739130434785,
+    "completed_episode_count": 23,
+    "amp_shape": [
+      10,
+      670
+    ],
+    "depth_min": 0.17807158827781677,
+    "depth_max": 0.7752448320388794,
+    "edge_count": 8922,
+    "root_height_mean": 0.8407447934150696,
+    "fixed_base": false
+  },
+  "video": {
+    "path": "artifacts/G1_HikingLab3_\u5b66\u4e60\u7a7a\u95f4\u4fee\u590d_1000\u66f4\u65b0_\u672a\u6536\u655b.mp4",
+    "seconds": 20,
+    "frames": 1000,
+    "fps": 50,
+    "publication_id": "hikinglab3-learning-space-corrected-20261104",
+    "artifact_id": "art_955a0668751b4e6e"
+  }
+}

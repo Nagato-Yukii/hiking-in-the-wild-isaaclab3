@@ -1,0 +1,44 @@
+{
+  "official_mirror_mapping_matches": true,
+  "independent_feature_max_abs_errors": {
+    "projected_gravity": 1.0594875071712195e-07,
+    "joint_pos_rel": 0.0,
+    "joint_vel": 0.0,
+    "base_lin_vel": 1.2126428625691688e-05,
+    "base_ang_vel": 5.1694239147082044e-05
+  },
+  "same_step_all_reset": {
+    "max_error": 1.275105357170105,
+    "cursors_changed": 4
+  },
+  "same_step_partial_reset": {
+    "max_error": 0.9447701573371887,
+    "unreset_cursor_delta": [
+      1,
+      1,
+      1
+    ]
+  },
+  "reference_windows": {
+    "D_mean": 0.3188568651676178,
+    "amp_per_step_mean": 0.22017934918403625,
+    "amp_quantiles": [
+      0.17781083285808563,
+      0.20732639729976654,
+      0.22082118690013885,
+      0.2319459766149521,
+      0.2415667623281479
+    ]
+  },
+  "synthetic_static_reference_poses": {
+    "D_mean": 0.19044485688209534,
+    "amp_per_step_mean": 0.20889398455619812,
+    "amp_quantiles": [
+      0.19392631947994232,
+      0.2017233669757843,
+      0.20912671089172363,
+      0.21448783576488495,
+      0.22576670348644257
+    ]
+  }
+}

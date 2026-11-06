@@ -1,0 +1,11 @@
+{
+  "mode": "train",
+  "iterations": 2000,
+  "num_envs": 2048,
+  "seconds": 6515.48634310998,
+  "start_iteration": 15000,
+  "end_iteration": 17000,
+  "discriminator_updated": true,
+  "finite_parameters": true,
+  "note": "Pipeline validation; not a converged parkour policy."
+}

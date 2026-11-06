@@ -1,0 +1,27 @@
+{
+  "episodes": [
+    {
+      "policy": "local",
+      "wave": 0,
+      "env": 8,
+      "terrain": "ramp",
+      "status": 1,
+      "seconds": 8.78,
+      "start_distance": 3.6676032543182373,
+      "end_distance": 0.24138140678405762
+    },
+    {
+      "policy": "local",
+      "wave": 0,
+      "env": 8,
+      "terrain": "ramp",
+      "status": 2,
+      "seconds": 15.0,
+      "start_distance": 3.6676032543182373,
+      "end_distance": 0.906302273273468
+    }
+  ],
+  "initial_states_match": true,
+  "output": "/home/ye/Desktop/HikingLab3/artifacts/G1_\u659c\u5761_15000_vs_17000_\u7eed\u8bad\u524d\u540e.mp4",
+  "freeze_success_before_autoreset": true
+}

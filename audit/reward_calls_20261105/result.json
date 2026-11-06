@@ -1,0 +1,52 @@
+{
+  "policy_steps": 24,
+  "num_envs": 8,
+  "physics_dt": 0.005,
+  "policy_dt": 0.02,
+  "decimation": 4,
+  "counts": {
+    "task_reward_compute": 24,
+    "amp_policy_history_append": 24,
+    "amp_reward_compute": 24,
+    "discriminator_forward": 24
+  },
+  "per_term_calls": {
+    "track_lin_vel_xy_exp": 24,
+    "track_ang_vel_z_exp": 24,
+    "heading_error": 24,
+    "dont_wait": 24,
+    "is_alive": 24,
+    "stand_still": 24,
+    "volume_points_penetration": 24,
+    "feet_air_time": 24,
+    "feet_slide": 24,
+    "joint_deviation_hip": 24,
+    "ang_vel_xy_l2": 24,
+    "dof_torques_l2": 24,
+    "dof_acc_l2": 24,
+    "dof_vel_l2": 24,
+    "action_rate_l2": 24,
+    "flat_orientation_l2": 24,
+    "pelvis_orientation_l2": 24,
+    "feet_flat_ori": 24,
+    "feet_at_plane": 24,
+    "feet_close_xy": 24,
+    "energy": 24,
+    "freeze_upper_body": 24,
+    "dof_pos_limits": 24,
+    "dof_vel_limits": 24,
+    "torque_limits": 24,
+    "undesired_contacts": 24
+  },
+  "reward_dt_unique": [
+    0.02
+  ],
+  "task_sum_max_error": 0.0,
+  "stored_ppo_reward_max_error": 0.0,
+  "extra_observation_reads": 48,
+  "extra_read_history_max_error": 0.0,
+  "done_transitions": 32,
+  "timeout_transitions": 32,
+  "optimizer_updates": 0,
+  "note": "8 environments, 2 terrain rows, 0.12s episodes to exercise timeout resets. Real runner.rollout_step; no optimizer updates."
+}

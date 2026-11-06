@@ -1,0 +1,12 @@
+{
+  "terrain_all_parameters": true,
+  "ActionsCfg": true,
+  "CommandsCfg": true,
+  "G1Rewards": true,
+  "CurriculumCfg": true,
+  "DepthEncoderConv2dCfg": true,
+  "EncoderConfigs": true,
+  "MoEPolicyCfg": true,
+  "AmpAlgoCfg": true,
+  "G1ParkourPPORunnerCfg": true
+}
