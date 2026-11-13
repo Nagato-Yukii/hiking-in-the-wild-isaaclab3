@@ -1,0 +1,17 @@
+{
+  "hardware": "RTX 4090",
+  "num_envs": 4096,
+  "seed": 42,
+  "unit": "seconds",
+  "first_10000_updates": {
+    "lab3_newton": 42672.481432575034,
+    "official_physx": 50503.46,
+    "lab3_source": "logs/hiking-g1-unfiltered-4096-10k-20261109/result.json: seconds",
+    "official_source": "InstinctLab-official/comparison/training.log: final Total time",
+    "scope": "Lab3 entrypoint elapsed time; official runner accumulated training-loop time. Official process wall time including startup was 50616.180274982995 s. Both first-10k runs completed uninterrupted."
+  },
+  "lab3_additional_20000_updates": 85843.83340124902,
+  "lab3_training_stage_total": 128516.31483382406,
+  "official_continuation": "Interrupted at logged 23291; recovered from saved 23000, approximately 292 unsaved updates repeated. Final recovery process wall time including startup was 35392.534201294 s. No uninterrupted 20k time is reported.",
+  "official_recovery_last_7000_training_seconds": 35280.0
+}

@@ -6,9 +6,9 @@ Python 3.12.9，PyTorch 2.11.0+cu130，Newton 1.6.1，Warp 1.17.0，RTX 4090 24G
 
 ## 本项目已移植任务
 
-注册两个 Gym task：`Hiking-G1-AMP-v0` 和 `Hiking-G1-AMP-Unfiltered-v0`（`hikinglab3/__init__.py`）。新任务继承现有配置，参考数据完整保留。
+仅注册 `Hiking-G1-AMP-Unfiltered-v0`（`hikinglab3/__init__.py`），配置为 `HikingEnvCfg`，完整保留 AMP 参考数据。旧过滤任务及配置开关已删除。
 环境类 `HikingEnvCfg` 位于 `hikinglab3/config.py`；训练类 `G1ParkourPPORunnerCfg` 位于 `hikinglab3/agent_cfg.py`。
-`run.sh --task Hiking-G1-AMP-Unfiltered-v0` 选择无过滤任务；省略参数时使用原任务。
+`run.sh` 默认使用该任务；也可显式传入 `--task Hiking-G1-AMP-Unfiltered-v0`。
 
 机器人为 Unitree G1，29 个关节，带鞋、浮动基座、自碰撞。物理 200Hz，策略 50Hz。
 策略通过关节位置目标和 PD 控制机器人，根据目标位置生成速度/航向指令，到达阈值 0.4m。

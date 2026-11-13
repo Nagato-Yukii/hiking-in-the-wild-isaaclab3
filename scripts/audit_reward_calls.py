@@ -18,7 +18,7 @@ cfg.scene.terrain.max_init_terrain_level=1
 cfg.episode_length_s=.12  # Force several timeout resets without changing the step/reward implementation.
 cfg.sim.visualizer_cfgs=[];cfg.video_recorders=[]
 with launch_simulation(cfg,{}):
-    env=gym.make('Hiking-G1-AMP-v0',cfg=cfg).unwrapped
+    env=gym.make('Hiking-G1-AMP-Unfiltered-v0',cfg=cfg).unwrapped
     try:
         wrapped=InstinctRlVecEnvWrapper(env)
         robot=env.scene['robot']

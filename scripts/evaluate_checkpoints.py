@@ -92,11 +92,11 @@ def main():
                 'checkpoint_sha256':hashlib.sha256(args.checkpoint.read_bytes()).hexdigest(),
                 'labels':dict(zip(names,labels)), 'per_terrain_per_wave':args.per_terrain,
                 'waves':args.waves,'seed':42,'success':'within 0.25m before 15s and without simultaneous physical failure',
-                'command_max_forward_mps':.55, 'note':'Common Newton transfer comparison, paper-sized geometry; not a native PhysX paper reproduction. Official release is stair-specialized.'}
+                'command_max_forward_mps':.55, 'note':'Paired Newton evaluation with fixed terrain geometry; official .pt or released stair policy selected by command-line arguments.'}
     (log/'protocol.json').write_text(json.dumps(protocol,indent=2))
     started = time.monotonic()
     with launch_simulation(cfg, {'enable_cameras':args.video}):
-        env = gym.make('Hiking-G1-AMP-v0',cfg=cfg).unwrapped
+        env = gym.make('Hiking-G1-AMP-Unfiltered-v0',cfg=cfg).unwrapped
         try:
             wrapped = InstinctRlVecEnvWrapper(env)
             robot = env.scene['robot']; terrain = env.scene.terrain

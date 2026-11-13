@@ -33,7 +33,7 @@ Success means reaching within 0.25 m of the target within 15 s, without simultan
 
 The unfiltered task removes speed-threshold window rejection, early reference resampling around flagged transitions and the first-90% reset-start restriction, and includes tail frames. The 10k filtered Lab3 baseline scored 44.23% overall in the earlier evaluation; its unfiltered counterpart scored 72.20%. After resuming, unfiltered Lab3 reaches 98.53%.
 
-Lab3 completed its additional 20k updates in 23.85 hours. Official training was interrupted at logged update 23291 by a service stop and host restart. It resumed from the saved 23000 checkpoint for 7000 further updates; the final segment took 9.80 hours. Policy, discriminator, optimizer states, update counter and adaptive PPO learning-rate scalar are restored at resume. Environments and curricula initialize anew. The official curve combines the pre-interruption and recovery segments at update 23000.
+The uninterrupted initial 10k stage took 11.85 hours for Lab3 and 14.03 hours for official PhysX (14.06 hours including process startup). Lab3 completed its additional 20k updates in 23.85 hours, totaling 35.70 hours across both stages. [Timing values and scope](training_timing.json). Official training was interrupted at logged update 23291 by a service stop and host restart. It resumed from the saved 23000 checkpoint for 7000 further updates; the final segment took 9.80 hours. Policy, discriminator, optimizer states, update counter and adaptive PPO learning-rate scalar are restored at resume. Environments and curricula initialize anew. The official curve combines the pre-interruption and recovery segments at update 23000.
 
 ![Training curves](training_comparison.png)
 
