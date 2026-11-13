@@ -2,22 +2,43 @@
 
 Unitree G1 (29 DoF, shoes) parkour training on **Isaac Lab 3.0 / Newton MJWarp**, with depth perception, AMP, PPO and the upstream four-expert MoE policy. Based on [Hiking in the Wild](https://project-instinct.github.io/hiking-in-the-wild/). [中文说明](README_zh.md).
 
-## Tasks
+## Task
 
-| Gym ID | AMP reference sampling |
-|---|---|
-| `Hiking-G1-AMP-Unfiltered-v0` | All 18,982 source frames and all 18,973 complete ten-frame windows; continuous playback across every internal transition |
-| `Hiking-G1-AMP-v0` | Original port sampling with speed-based window rejection and a restricted reset-start range |
+`Hiking-G1-AMP-Unfiltered-v0` is the only registered task and the default for training, play and evaluation. It retains all 18,982 source frames and all 18,973 complete ten-frame AMP windows, and plays continuously across every internal transition. The old filtered task, its configuration and its sampling branches have been removed.
 
-The unfiltered task inherits the same robot, terrain curriculum, observations, 26 reward terms and training algorithm. Both tasks use 200 Hz physics, 50 Hz control, ten-frame AMP features and eight-frame policy/depth histories.
+The task uses 200 Hz physics, 50 Hz control, 26 reward terms, ten-frame AMP features and eight-frame policy/depth histories.
 
 ## Fix: retain the complete AMP reference
 
 The original port rejected reference frames with root speed above 10 m/s or joint speed above 100 rad/s. This removed 490 of 18,972 candidate windows. During continuous playback, the same valid-start mask also resampled the reference up to nine frames before a flagged transition. Reset starts were restricted to the first 90% of the file, and the final complete window was omitted.
 
-`Hiking-G1-AMP-Unfiltered-v0` removes those content-based rejection and resampling operations, includes the final complete window, and allows every source frame as a reset cursor. Root/joint velocities pass through without clipping. Frame conversion, joint-name mapping, feature scales, mirroring and episode/file-end resets remain part of reference construction. `--task` selects the task; the existing task keeps its original behavior.
+`Hiking-G1-AMP-Unfiltered-v0` removes those content-based rejection and resampling operations, includes the final complete window, and allows every source frame as a reset cursor. Root/joint velocities pass through without clipping. Frame conversion, joint-name mapping, feature scales, mirroring and episode/file-end resets remain part of reference construction. All entrypoints now use this sampling behavior; there is no filtering option.
 
 The training entrypoint also accepts `--save-interval`. Resume restores the policy, discriminator, both optimizers, update counter and PPO adaptive learning-rate scalar. Local-only evaluation now loads only the requested model. `--official-checkpoint` evaluates a trained InstinctLab `.pt` with joint-name mapping for observation histories and actions.
+
+## Isaac Lab 3.0 versus official InstinctLab
+
+| Component | This implementation | Official training implementation |
+|---|---|---|
+| Runtime | Isaac Lab 3.0, Newton MJWarp, Python 3.12, PyTorch 2.11 | InstinctLab on Isaac Lab / Isaac Sim 5.1, PhysX, Python 3.11, PyTorch 2.7 |
+| Physics integration | Newton `implicitfast`, two MJWarp substeps per physics step | PhysX articulation/contact solver |
+| AMP reference | Direct NPZ loading, explicit WXYZ→XYZW and joint-name conversion; complete reference stream | `MotionReferenceManager` / `AmassMotion` reference pipeline |
+| Depth | Lab3 ray-cast camera and local temporal buffer; clamp to 2.5 m before crop/resize/blur | InstinctLab ray-cast camera and sensor processing; crop/resize/blur before depth clipping |
+| Material randomization | Newton friction API | PhysX static/dynamic friction with 64 material buckets |
+| Learning | Upstream `instinct_rl` PPO + AMP, four-expert MoE, 24 rollout steps, five epochs, four minibatches | Same algorithm and network configuration |
+
+Both use the G1 29-DoF model, terrain curriculum, 26 reward weights and 50% reference mirroring. Solver, contact/material handling and depth preprocessing differ between implementations.
+
+### Measured training time
+
+RTX 4090, 4096 environments, seed 42. The first 10,000 updates completed uninterrupted in both runs. Lab3 timing uses entrypoint elapsed time; official timing uses accumulated training-loop time (14.06 h including process startup):
+
+| Stage | Lab3 / Newton | Official / PhysX |
+|---|---:|---:|
+| 0 → 10,000 updates | 11.85 h | 14.03 h |
+| Average time per update | 4.27 s | 5.05 s |
+
+Lab3 used approximately **15.5% less time** for this 10k stage. Its next 20k updates took 23.85 h, for 35.70 h across the two training stages. The official continuation was interrupted at update 23291 and recovered from checkpoint 23000; the final 7000-update training segment took 9.80 h. [Timing measurements and scope](results/30000/training_timing.json).
 
 ## Results: 4096 environments, 30000 updates
 
@@ -35,6 +56,8 @@ Both policies started with 10,000 updates and resumed for another 20,000, seed 4
 | Small box | 87.6% | 86.8% | 95.7% |
 | Ramp | 100.0% | 100.0% | 99.9% |
 | **Overall** | **98.53%** | **97.62%** | **98.84%** |
+
+The official Newton and PhysX columns evaluate **the same PhysX-trained checkpoint** in two engines. Lab3 leads by 0.91 percentage points in the paired Newton evaluation; official native PhysX scores 98.84%, with the largest remaining terrain difference on small boxes. These are target-reaching success rates; the video and AMP audit describe motion behavior separately.
 
 [Evaluation details and 10k comparisons](results/30000/README.md) · [Raw counts](results/30000/success_rates.json) · [Training curves](results/30000/training_comparison.png)
 

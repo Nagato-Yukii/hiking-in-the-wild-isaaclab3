@@ -20,9 +20,7 @@ class MotionContract(unittest.TestCase):
             np.savez(path, framerate=50., joint_names=['a','b'], joint_pos=joints,
                      base_pos_w=position,
                      base_quat_w=np.tile(np.array([1.,0.,0.,0.],dtype=np.float32),(frames,1)))
-            legacy = MotionDataset(['a','b'],torch.zeros(1,2),'cpu',path)
-            full = MotionDataset(['a','b'],torch.zeros(1,2),'cpu',path,filter_discontinuities=False)
-            self.assertNotIn(19,legacy.starts.tolist())
+            full = MotionDataset(['a','b'],torch.zeros(1,2),'cpu',path)
             self.assertEqual(full.starts.tolist(),list(range(31)))
             full.advance(1,0,torch.ones(1,dtype=torch.bool))
             full._cursor.fill_(9)

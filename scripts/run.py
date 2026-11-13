@@ -6,10 +6,10 @@ import torch
 import gymnasium as gym
 from isaaclab.app import launch_simulation
 from isaaclab.envs import ManagerBasedRLEnv
-from hikinglab3.config import HikingEnvCfg, HikingUnfilteredAmpEnvCfg
+from hikinglab3.config import HikingEnvCfg
 
 p = argparse.ArgumentParser()
-p.add_argument("--task", choices=["Hiking-G1-AMP-v0", "Hiking-G1-AMP-Unfiltered-v0"], default="Hiking-G1-AMP-v0")
+p.add_argument("--task", choices=["Hiking-G1-AMP-Unfiltered-v0"], default="Hiking-G1-AMP-Unfiltered-v0")
 p.add_argument("--mode", choices=["smoke", "train", "play"], default="smoke")
 p.add_argument("--profile", choices=["original", "smoke"], default="original")
 p.add_argument("--num-envs", type=int)
@@ -59,7 +59,7 @@ if args.checkpoint:
         raise ValueError("This checkpoint has known simulation/reward defects; use a learning-space-final checkpoint.")
 log = Path(args.log_dir)
 log.mkdir(parents=True, exist_ok=True)
-cfg = HikingUnfilteredAmpEnvCfg() if args.task == "Hiking-G1-AMP-Unfiltered-v0" else HikingEnvCfg()
+cfg = HikingEnvCfg()
 cfg.scene.num_envs = args.num_envs
 cfg.scene.terrain.terrain_generator.num_rows = args.terrain_rows
 cfg.scene.terrain.terrain_generator.num_cols = args.terrain_cols
@@ -104,7 +104,6 @@ source_root = Path(__file__).resolve().parents[1]
 with launch_simulation(cfg, {"enable_cameras": args.video}):
     env = gym.make(args.task, cfg=cfg).unwrapped
     try:
-        from hikinglab3.motions import MotionDataset
         from hikinglab3.wrapper import InstinctRlVecEnvWrapper
 
         wrapped = InstinctRlVecEnvWrapper(env)
@@ -136,11 +135,6 @@ with launch_simulation(cfg, {"enable_cameras": args.video}):
             prior_motion = Path(args.checkpoint).parent / "motion_manifest.json"
             if prior_motion.exists() and json.loads(prior_motion.read_text())["joint_names"] != robot.joint_names:
                 raise ValueError("Checkpoint joint order differs from the active articulation")
-        if not hasattr(wrapped, "motion_dataset"):
-            wrapped.motion_dataset = MotionDataset(
-                robot.joint_names, robot.data.default_joint_pos.torch, env.device,
-                filter_discontinuities=cfg.amp_filter_discontinuities,
-            )
         (log / "motion_manifest.json").write_text(json.dumps(wrapped.motion_dataset.manifest, indent=2))
         (log / "observation_format.json").write_text(json.dumps(wrapped.get_obs_format(), indent=2))
         if args.mode in ("train", "play"):
