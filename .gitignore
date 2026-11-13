@@ -19,3 +19,5 @@ artifacts/*
 !artifacts/G1_斜坡_15000_vs_17000_续训前后.mp4
 !artifacts/ramp_video_provenance.json
 !artifacts/ramp_comparison_preview.png
+
+!artifacts/lab3_vs_official_30000.mp4

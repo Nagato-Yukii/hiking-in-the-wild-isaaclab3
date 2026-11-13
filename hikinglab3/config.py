@@ -145,6 +145,7 @@ class SceneCfg(InteractiveSceneCfg):
 
 @configclass
 class HikingEnvCfg(ManagerBasedRLEnvCfg):
+    amp_filter_discontinuities: bool = True
     scene = SceneCfg(num_envs=4096, env_spacing=2.5)
     observations = ObservationsCfg()
     actions = ActionsCfg()
@@ -164,3 +165,10 @@ class HikingEnvCfg(ManagerBasedRLEnvCfg):
         self.sim.physics.solver_cfg.nconmax = 300
         self.rewards.volume_points_penetration.params = {}
         self.rewards.feet_at_plane.params["height_offset"] = 0.058
+
+
+@configclass
+class HikingUnfilteredAmpEnvCfg(HikingEnvCfg):
+    """Same locomotion task with all AMP reference frames and transitions retained."""
+
+    amp_filter_discontinuities: bool = False

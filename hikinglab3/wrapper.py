@@ -68,6 +68,14 @@ class InstinctRlVecEnvWrapper(VecEnv):
             self.num_critic_obs = None
         # reset at the start since the Instinct-RL runner does not call reset
         self.env.reset()
+        if not getattr(self.cfg, "amp_filter_discontinuities", True):
+            from hikinglab3.motions import MotionDataset
+
+            robot = self.unwrapped.scene["robot"]
+            self.motion_dataset = MotionDataset(
+                robot.joint_names, robot.data.default_joint_pos.torch, self.device,
+                filter_discontinuities=False,
+            )
 
     def __str__(self):
         """Returns the wrapper name and the :attr:`env` representation string."""

@@ -7,4 +7,4 @@
 - Isaac Lab: official `v3.0.0`, commit `e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4`. Copied camera update/kernel and legacy height-field decorator retain BSD-3-Clause attribution.
 - Motion release: official project-page Google Drive link `10tQylYHdKLVDVnmVHrygLB70neHnPdoF`. Source URL and locally measured SHA-256 values are recorded in `data/provenance.json`.
 
-This is a local third-party port, not an official Isaac Lab or Project Instinct release. Only the G1 parkour training path is ported; the vendor trees include other tasks that have not been migrated.
+The G1 parkour path runs on Isaac Lab 3.0 / Newton. The vendored source trees retain the additional upstream task implementations.

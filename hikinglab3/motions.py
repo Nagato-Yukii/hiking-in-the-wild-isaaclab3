@@ -14,7 +14,8 @@ DEFAULT_MOTION = (
 
 
 class MotionDataset:
-    def __init__(self, joint_names, default_joint_pos, device, path=DEFAULT_MOTION):
+    def __init__(self, joint_names, default_joint_pos, device, path=DEFAULT_MOTION, *, filter_discontinuities=True):
+        self.filter_discontinuities = filter_discontinuities
         path = Path(path)
         data = np.load(path, allow_pickle=False)
         required = {"framerate", "joint_names", "joint_pos", "base_pos_w", "base_quat_w"}
@@ -55,10 +56,15 @@ class MotionDataset:
         }
         if not all(torch.isfinite(v).all() for v in self.features.values()):
             raise ValueError("Nonfinite motion data")
-        # Exclude windows that cross discontinuous concatenation seams.
-        seam = (lin.norm(dim=-1) > 10.0) | (joint_vel.abs().amax(dim=-1) > 100.0)
-        starts = torch.arange(self.frames - 10, device=device)
-        self.starts = starts[~seam[starts[:, None] + torch.arange(10, device=device)].any(dim=1)]
+        if self.filter_discontinuities:
+            # Legacy task: exclude windows crossing suspected concatenation seams.
+            seam = (lin.norm(dim=-1) > 10.0) | (joint_vel.abs().amax(dim=-1) > 100.0)
+            starts = torch.arange(self.frames - 10, device=device)
+            self.starts = starts[~seam[starts[:, None] + torch.arange(10, device=device)].any(dim=1)]
+        else:
+            # Include every complete 10-frame window, including the final one.
+            # No speed threshold, seam mask, clipping, or content-based rejection.
+            self.starts = torch.arange(self.frames - 10 + 1, device=device)
         if len(self.starts) == 0:
             raise ValueError("No valid AMP windows")
         self.device = device
@@ -90,7 +96,9 @@ class MotionDataset:
             "window_frames": 10,
             "symmetric_augmentation_probability": 0.5,
             "sampling": "continuous per-environment stream, reset history repeated; NPZ lacks original clip labels",
-            "start_range": [0.0, 0.9],
+            "start_range": [0.0, 0.9] if self.filter_discontinuities else [0.0, 1.0],
+            "filter_discontinuities": self.filter_discontinuities,
+            "reference_stream_frames": "legacy valid-window starts" if self.filter_discontinuities else "all source frames",
         }
 
     def sample(self, n):
@@ -113,8 +121,9 @@ class MotionDataset:
     def advance(self, n, step, reset_mask):
         """Keep the original per-environment reference history and 50% mirroring.
 
-        Published NPZ has no clip IDs: detected discontinuities are treated as
-        boundaries, and only the reference stream is resampled at a boundary.
+        The legacy task treats detected discontinuities as boundaries. The
+        unfiltered task crosses every internal transition and resets only on
+        episode reset or the actual end of the source file.
         """
         # Observation reads must be idempotent, including the step of an episode
         # reset. episode_length_buf remains zero for all reads on that step.
@@ -129,11 +138,15 @@ class MotionDataset:
             reset_mask = torch.ones(n, dtype=torch.bool, device=self.device)
         else:
             self._cursor += 1
-        valid = torch.zeros(self.frames, dtype=torch.bool, device=self.device)
-        valid[self.starts] = True
-        reset_mask = reset_mask | ~valid[self._cursor.clamp(max=self.frames - 1)]
+        if self.filter_discontinuities:
+            valid = torch.zeros(self.frames, dtype=torch.bool, device=self.device)
+            valid[self.starts] = True
+            reset_mask = reset_mask | ~valid[self._cursor.clamp(max=self.frames - 1)]
+            eligible = self.starts[self.starts < int(self.frames * 0.9)]
+        else:
+            reset_mask = reset_mask | (self._cursor >= self.frames)
+            eligible = torch.arange(self.frames, device=self.device)
         count = int(reset_mask.sum())
-        eligible = self.starts[self.starts < int(self.frames * 0.9)]
         self._cursor[reset_mask] = eligible[torch.randint(len(eligible), (count,), device=self.device)]
         self._mirror_mask[reset_mask] = torch.rand(count, device=self.device) < 0.5
         features = {k: v[self._cursor].clone() for k, v in self.features.items()}

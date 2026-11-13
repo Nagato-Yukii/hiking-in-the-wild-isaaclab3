@@ -6,9 +6,10 @@ import torch
 import gymnasium as gym
 from isaaclab.app import launch_simulation
 from isaaclab.envs import ManagerBasedRLEnv
-from hikinglab3.config import HikingEnvCfg
+from hikinglab3.config import HikingEnvCfg, HikingUnfilteredAmpEnvCfg
 
 p = argparse.ArgumentParser()
+p.add_argument("--task", choices=["Hiking-G1-AMP-v0", "Hiking-G1-AMP-Unfiltered-v0"], default="Hiking-G1-AMP-v0")
 p.add_argument("--mode", choices=["smoke", "train", "play"], default="smoke")
 p.add_argument("--profile", choices=["original", "smoke"], default="original")
 p.add_argument("--num-envs", type=int)
@@ -16,6 +17,7 @@ p.add_argument("--seed", type=int, default=42)
 p.add_argument("--diagnostics", action="store_true")
 p.add_argument("--steps", type=int, default=100)
 p.add_argument("--iterations", type=int)
+p.add_argument("--save-interval", type=int, help="Checkpoint interval in training updates")
 p.add_argument("--terrain-rows", type=int)
 p.add_argument("--terrain-cols", type=int)
 p.add_argument("--max-init-terrain-level", type=int)
@@ -31,6 +33,8 @@ p.add_argument("--video", action="store_true")
 p.add_argument("--camera-distance", type=float, default=4.0, help="Wider context around the 8 m terrain tile")
 p.add_argument("--view-env", type=int, default=0)
 args = p.parse_args()
+if args.save_interval is not None and args.save_interval <= 0:
+    p.error("--save-interval must be positive")
 if args.camera_distance <= 0:
     p.error("--camera-distance must be positive")
 if args.num_envs is None:
@@ -55,7 +59,7 @@ if args.checkpoint:
         raise ValueError("This checkpoint has known simulation/reward defects; use a learning-space-final checkpoint.")
 log = Path(args.log_dir)
 log.mkdir(parents=True, exist_ok=True)
-cfg = HikingEnvCfg()
+cfg = HikingUnfilteredAmpEnvCfg() if args.task == "Hiking-G1-AMP-Unfiltered-v0" else HikingEnvCfg()
 cfg.scene.num_envs = args.num_envs
 cfg.scene.terrain.terrain_generator.num_rows = args.terrain_rows
 cfg.scene.terrain.terrain_generator.num_cols = args.terrain_cols
@@ -98,7 +102,7 @@ source_root = Path(__file__).resolve().parents[1]
     )
 )
 with launch_simulation(cfg, {"enable_cameras": args.video}):
-    env = gym.make("Hiking-G1-AMP-v0", cfg=cfg).unwrapped
+    env = gym.make(args.task, cfg=cfg).unwrapped
     try:
         from hikinglab3.motions import MotionDataset
         from hikinglab3.wrapper import InstinctRlVecEnvWrapper
@@ -132,7 +136,11 @@ with launch_simulation(cfg, {"enable_cameras": args.video}):
             prior_motion = Path(args.checkpoint).parent / "motion_manifest.json"
             if prior_motion.exists() and json.loads(prior_motion.read_text())["joint_names"] != robot.joint_names:
                 raise ValueError("Checkpoint joint order differs from the active articulation")
-        wrapped.motion_dataset = MotionDataset(robot.joint_names, robot.data.default_joint_pos.torch, env.device)
+        if not hasattr(wrapped, "motion_dataset"):
+            wrapped.motion_dataset = MotionDataset(
+                robot.joint_names, robot.data.default_joint_pos.torch, env.device,
+                filter_discontinuities=cfg.amp_filter_discontinuities,
+            )
         (log / "motion_manifest.json").write_text(json.dumps(wrapped.motion_dataset.manifest, indent=2))
         (log / "observation_format.json").write_text(json.dumps(wrapped.get_obs_format(), indent=2))
         if args.mode in ("train", "play"):
@@ -140,7 +148,9 @@ with launch_simulation(cfg, {"enable_cameras": args.video}):
             from hikinglab3.agent_cfg import G1ParkourPPORunnerCfg
 
             acfg = G1ParkourPPORunnerCfg().to_dict()
-            acfg["save_interval"] = max(1, min(acfg["save_interval"], args.iterations))
+            acfg["save_interval"] = max(
+                1, min(args.save_interval if args.save_interval is not None else acfg["save_interval"], args.iterations)
+            )
             (log / "agent.json").write_text(json.dumps(acfg, indent=2))
             runner = OnPolicyRunner(wrapped, acfg, log_dir=str(log), device=env.device)
             if args.checkpoint:
@@ -183,7 +193,7 @@ with launch_simulation(cfg, {"enable_cameras": args.video}):
                 "end_iteration": runner.current_learning_iteration,
                 "discriminator_updated": updated,
                 "finite_parameters": True,
-                "note": "Pipeline validation; not a converged parkour policy.",
+                "task": args.task,
             }
         else:
             obs, extras = wrapped.reset()

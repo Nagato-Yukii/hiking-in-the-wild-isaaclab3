@@ -1,0 +1,45 @@
+{
+  "num_envs_training": 4096,
+  "seed": 42,
+  "initial_updates": 10000,
+  "additional_updates": 20000,
+  "final_update": 30000,
+  "save_interval": 1000,
+  "per_terrain_per_wave": 100,
+  "waves": 10,
+  "success_distance_m": 0.25,
+  "timeout_s": 15,
+  "max_forward_command_mps": 0.55,
+  "noise": false,
+  "material_randomization": false,
+  "curriculum_during_evaluation": false,
+  "paired_newton_state_fields": [
+    "root_position",
+    "root_quaternion",
+    "root_linear_velocity",
+    "root_angular_velocity",
+    "joint_positions",
+    "joint_velocities",
+    "target_position"
+  ],
+  "initial_states": "Ten Newton reset waves have equal state hashes between policies.",
+  "maps": "Repeated resets on fixed evaluation maps. One training seed per implementation.",
+  "physx": "Separate evaluation on the same terrain protocol.",
+  "official_recovery": {
+    "interrupted_at_logged_iteration": 23291,
+    "resumed_checkpoint_iteration": 23000,
+    "remaining_updates": 7000,
+    "environment_reinitialized": true
+  },
+  "models": {
+    "lab": {
+      "filename": "model_30000.pt",
+      "sha256": "b849b8168affb3b0c876e503b681d3465cd834b8c7ff19ad3368216d88add0a9"
+    },
+    "official": {
+      "filename": "model_30000.pt",
+      "sha256": "9751e60190cfa263c282830c926053f14179b8c615ac680d21f06c7f553c8d00"
+    }
+  },
+  "motion_sha256": "7cfb7c1dcaa6f2a55a13c4849be9e17b4c960ce4015c500ac0ddfb9d77f4ba5b"
+}

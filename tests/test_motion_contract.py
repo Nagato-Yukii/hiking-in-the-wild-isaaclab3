@@ -9,6 +9,43 @@ from hikinglab3.motions import MotionDataset
 
 
 class MotionContract(unittest.TestCase):
+    def test_unfiltered_reference_crosses_large_root_and_joint_transitions(self):
+        with tempfile.TemporaryDirectory() as folder:
+            frames = 40
+            position = np.zeros((frames, 3), dtype=np.float32)
+            position[20:, 0] = 12.0
+            joints = np.zeros((frames, 2), dtype=np.float32)
+            joints[20:, 0] = 3.0
+            path = Path(folder) / 'motion.npz'
+            np.savez(path, framerate=50., joint_names=['a','b'], joint_pos=joints,
+                     base_pos_w=position,
+                     base_quat_w=np.tile(np.array([1.,0.,0.,0.],dtype=np.float32),(frames,1)))
+            legacy = MotionDataset(['a','b'],torch.zeros(1,2),'cpu',path)
+            full = MotionDataset(['a','b'],torch.zeros(1,2),'cpu',path,filter_discontinuities=False)
+            self.assertNotIn(19,legacy.starts.tolist())
+            self.assertEqual(full.starts.tolist(),list(range(31)))
+            full.advance(1,0,torch.ones(1,dtype=torch.bool))
+            full._cursor.fill_(9)
+            full._mirror_mask.fill_(False)
+            for step in range(1,11):
+                actual = full.advance(1,step,torch.zeros(1,dtype=torch.bool))
+            self.assertEqual(full._cursor.item(),19)
+            expected = torch.cat([v[10:20].flatten() for v in full.features.values()])[None]
+            torch.testing.assert_close(actual,expected,rtol=0,atol=0)
+            self.assertEqual(full.features['base_lin_vel'][19,0].item(),600.)
+            self.assertEqual(full.features['joint_vel'][19,0].item(),7.5)
+            # Every source frame is an eligible reset cursor, including the tail.
+            from unittest.mock import patch
+            original_randint = torch.randint
+            with patch('torch.randint',wraps=original_randint) as draw:
+                full.advance(1,11,torch.ones(1,dtype=torch.bool))
+                self.assertEqual(draw.call_args.args[0],frames)
+            full._cursor.fill_(frames-2)
+            full.advance(1,12,torch.zeros(1,dtype=torch.bool))
+            self.assertEqual(full._cursor.item(),frames-1)
+            full.advance(1,13,torch.zeros(1,dtype=torch.bool))
+            self.assertLess(full._cursor.item(),frames)
+
     def test_wxyz_joint_mapping_and_body_velocity(self):
         with tempfile.TemporaryDirectory() as folder:
             t = np.arange(30, dtype=np.float32) / 50
