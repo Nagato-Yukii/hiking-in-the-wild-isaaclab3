@@ -1,0 +1,456 @@
+{
+  "totals": {
+    "lab3_10000_historical": {
+      "trials": 9000,
+      "successes": 6498,
+      "failures": 198,
+      "timeouts": 2304,
+      "success_rate": 0.722
+    },
+    "lab3_30000": {
+      "trials": 9000,
+      "successes": 8868,
+      "failures": 82,
+      "timeouts": 50,
+      "success_rate": 0.9853333333333333
+    },
+    "official_10000_historical": {
+      "trials": 9000,
+      "successes": 5817,
+      "failures": 274,
+      "timeouts": 2909,
+      "success_rate": 0.6463333333333333
+    },
+    "official_30000": {
+      "trials": 9000,
+      "successes": 8786,
+      "failures": 107,
+      "timeouts": 107,
+      "success_rate": 0.9762222222222222
+    },
+    "official_30000_native_physx": {
+      "trials": 9000,
+      "successes": 8896,
+      "failures": 28,
+      "timeouts": 76,
+      "success_rate": 0.9884444444444445
+    }
+  },
+  "tables": {
+    "lab3_10000_historical": {
+      "rough": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 6.49918,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.2439250291287899
+      },
+      "gap": {
+        "trials": 1000,
+        "successes": 992,
+        "success_rate": 0.992,
+        "mean_reaching_seconds": 6.587197580645161,
+        "failures": 8,
+        "timeouts": 0,
+        "mean_end_distance": 0.25642843393981457
+      },
+      "stair_down": {
+        "trials": 1000,
+        "successes": 981,
+        "success_rate": 0.981,
+        "mean_reaching_seconds": 6.608338430173292,
+        "failures": 19,
+        "timeouts": 0,
+        "mean_end_distance": 0.27463469898700715
+      },
+      "platform_down": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 6.60862,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24409356860816478
+      },
+      "stair_up": {
+        "trials": 1000,
+        "successes": 989,
+        "success_rate": 0.989,
+        "mean_reaching_seconds": 7.216905965621841,
+        "failures": 2,
+        "timeouts": 9,
+        "mean_end_distance": 0.26579899397492407
+      },
+      "platform_up": {
+        "trials": 1000,
+        "successes": 51,
+        "success_rate": 0.051,
+        "mean_reaching_seconds": 9.404313725490196,
+        "failures": 51,
+        "timeouts": 898,
+        "mean_end_distance": 2.2998208419829607
+      },
+      "large_box": {
+        "trials": 1000,
+        "successes": 205,
+        "success_rate": 0.205,
+        "mean_reaching_seconds": 7.22039024390244,
+        "failures": 42,
+        "timeouts": 753,
+        "mean_end_distance": 1.4406688604354858
+      },
+      "small_box": {
+        "trials": 1000,
+        "successes": 280,
+        "success_rate": 0.28,
+        "mean_reaching_seconds": 11.332285714285714,
+        "failures": 76,
+        "timeouts": 644,
+        "mean_end_distance": 1.4279267667829991
+      },
+      "ramp": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.97596,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24397700439393522
+      }
+    },
+    "lab3_30000": {
+      "rough": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.78396,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.2430528005361557
+      },
+      "gap": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 4.6967799999999995,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24389945416152478
+      },
+      "stair_down": {
+        "trials": 1000,
+        "successes": 999,
+        "success_rate": 0.999,
+        "mean_reaching_seconds": 5.433793793793794,
+        "failures": 1,
+        "timeouts": 0,
+        "mean_end_distance": 0.2442901388257742
+      },
+      "platform_down": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.4345799999999995,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.2435166865736246
+      },
+      "stair_up": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.17154,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24416531299054622
+      },
+      "platform_up": {
+        "trials": 1000,
+        "successes": 997,
+        "success_rate": 0.997,
+        "mean_reaching_seconds": 5.517071213640923,
+        "failures": 3,
+        "timeouts": 0,
+        "mean_end_distance": 0.25065717980265617
+      },
+      "large_box": {
+        "trials": 1000,
+        "successes": 996,
+        "success_rate": 0.996,
+        "mean_reaching_seconds": 6.413152610441767,
+        "failures": 3,
+        "timeouts": 1,
+        "mean_end_distance": 0.25121349465847015
+      },
+      "small_box": {
+        "trials": 1000,
+        "successes": 876,
+        "success_rate": 0.876,
+        "mean_reaching_seconds": 6.983858447488585,
+        "failures": 75,
+        "timeouts": 49,
+        "mean_end_distance": 0.40864039249718187
+      },
+      "ramp": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.64146,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24373683427274226
+      }
+    },
+    "official_10000_historical": {
+      "rough": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 6.17374,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24329247526824474
+      },
+      "gap": {
+        "trials": 1000,
+        "successes": 995,
+        "success_rate": 0.995,
+        "mean_reaching_seconds": 6.393045226130654,
+        "failures": 5,
+        "timeouts": 0,
+        "mean_end_distance": 0.2555010289847851
+      },
+      "stair_down": {
+        "trials": 1000,
+        "successes": 961,
+        "success_rate": 0.961,
+        "mean_reaching_seconds": 5.776045785639958,
+        "failures": 39,
+        "timeouts": 0,
+        "mean_end_distance": 0.29681625771522524
+      },
+      "platform_down": {
+        "trials": 1000,
+        "successes": 996,
+        "success_rate": 0.996,
+        "mean_reaching_seconds": 5.964056224899598,
+        "failures": 4,
+        "timeouts": 0,
+        "mean_end_distance": 0.25265352112054823
+      },
+      "stair_up": {
+        "trials": 1000,
+        "successes": 908,
+        "success_rate": 0.908,
+        "mean_reaching_seconds": 10.771101321585903,
+        "failures": 19,
+        "timeouts": 73,
+        "mean_end_distance": 0.41421277789771555
+      },
+      "platform_up": {
+        "trials": 1000,
+        "successes": 0,
+        "success_rate": 0.0,
+        "mean_reaching_seconds": null,
+        "failures": 0,
+        "timeouts": 1000,
+        "mean_end_distance": 2.351075784921646
+      },
+      "large_box": {
+        "trials": 1000,
+        "successes": 97,
+        "success_rate": 0.097,
+        "mean_reaching_seconds": 7.6948453608247425,
+        "failures": 3,
+        "timeouts": 900,
+        "mean_end_distance": 1.513489373102784
+      },
+      "small_box": {
+        "trials": 1000,
+        "successes": 255,
+        "success_rate": 0.255,
+        "mean_reaching_seconds": 10.035529411764706,
+        "failures": 204,
+        "timeouts": 541,
+        "mean_end_distance": 1.5749428247511388
+      },
+      "ramp": {
+        "trials": 1000,
+        "successes": 605,
+        "success_rate": 0.605,
+        "mean_reaching_seconds": 10.801355371900826,
+        "failures": 0,
+        "timeouts": 395,
+        "mean_end_distance": 1.0511868262887
+      }
+    },
+    "official_30000": {
+      "rough": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.70692,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24300039035081863
+      },
+      "gap": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 4.86266,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24316519270837306
+      },
+      "stair_down": {
+        "trials": 1000,
+        "successes": 996,
+        "success_rate": 0.996,
+        "mean_reaching_seconds": 5.2773694779116465,
+        "failures": 2,
+        "timeouts": 2,
+        "mean_end_distance": 0.24715698273479939
+      },
+      "platform_down": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.43258,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.2427782480418682
+      },
+      "stair_up": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 6.14108,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24432246382534503
+      },
+      "platform_up": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.38068,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24332471890747548
+      },
+      "large_box": {
+        "trials": 1000,
+        "successes": 922,
+        "success_rate": 0.922,
+        "mean_reaching_seconds": 6.846464208242951,
+        "failures": 16,
+        "timeouts": 62,
+        "mean_end_distance": 0.30455390705168245
+      },
+      "small_box": {
+        "trials": 1000,
+        "successes": 868,
+        "success_rate": 0.868,
+        "mean_reaching_seconds": 7.017880184331798,
+        "failures": 89,
+        "timeouts": 43,
+        "mean_end_distance": 0.4421751464307308
+      },
+      "ramp": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.30166,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24270439291000367
+      }
+    },
+    "official_30000_native_physx": {
+      "rough": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.821659999999997,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24330771875381468
+      },
+      "gap": {
+        "trials": 1000,
+        "successes": 999,
+        "success_rate": 0.999,
+        "mean_reaching_seconds": 5.063643643643637,
+        "failures": 1,
+        "timeouts": 0,
+        "mean_end_distance": 0.24532506261765957
+      },
+      "stair_down": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.276400000000001,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24271844655275346
+      },
+      "platform_down": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.470040000000005,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.2428573362380266
+      },
+      "stair_up": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 6.109519999999995,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24441734531521797
+      },
+      "platform_up": {
+        "trials": 1000,
+        "successes": 1000,
+        "success_rate": 1.0,
+        "mean_reaching_seconds": 5.352800000000004,
+        "failures": 0,
+        "timeouts": 0,
+        "mean_end_distance": 0.24354568538069726
+      },
+      "large_box": {
+        "trials": 1000,
+        "successes": 941,
+        "success_rate": 0.941,
+        "mean_reaching_seconds": 7.07028692879916,
+        "failures": 9,
+        "timeouts": 50,
+        "mean_end_distance": 0.283506800621748
+      },
+      "small_box": {
+        "trials": 1000,
+        "successes": 957,
+        "success_rate": 0.957,
+        "mean_reaching_seconds": 7.130679205851628,
+        "failures": 17,
+        "timeouts": 26,
+        "mean_end_distance": 0.30351334349811077
+      },
+      "ramp": {
+        "trials": 1000,
+        "successes": 999,
+        "success_rate": 0.999,
+        "mean_reaching_seconds": 5.3131531531531495,
+        "failures": 1,
+        "timeouts": 0,
+        "mean_end_distance": 0.24623389583826066
+      }
+    }
+  }
+}

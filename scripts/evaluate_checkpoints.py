@@ -27,6 +27,7 @@ def reached_target(env):
 def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument('--checkpoint', required=True, type=Path)
+    parser.add_argument('--official-checkpoint', type=Path, help='Compare a trained official InstinctLab .pt using its adjacent agent.json and joint_names.json')
     parser.add_argument('--log-dir', required=True, type=Path)
     parser.add_argument('--per-terrain', type=int, default=100)
     parser.add_argument('--waves', type=int, default=10)
@@ -112,10 +113,34 @@ def main():
                 disc.load_state_dict(torch.load(args.checkpoint,map_location=env.device,weights_only=False)['discriminator'])
                 disc.eval()
 
-            official = OfficialStairPolicy(robot.joint_names,env.device)
-            (log/'adapter_validation.json').write_text(json.dumps(official.validation,indent=2))
             (log/'joint_names.json').write_text(json.dumps(robot.joint_names,indent=2))
-            policies = {'local':model.act_inference,'official':official}
+            policies = {'local':model.act_inference}
+            if 'official' in args.policies:
+                if args.official_checkpoint:
+                    source_cfg = json.loads((args.official_checkpoint.parent/'agent.json').read_text())['policy']
+                    source_cls = source_cfg.pop('class_name')
+                    official_model = modules.build_actor_critic(source_cls,source_cfg,wrapped.get_obs_format(),29,1).to(env.device)
+                    official_model.load_state_dict(torch.load(args.official_checkpoint,map_location=env.device,weights_only=False)['model_state_dict'])
+                    official_model.eval()
+                    source_names = json.loads((args.official_checkpoint.parent/'joint_names.json').read_text())
+                    to_source = torch.tensor([robot.joint_names.index(n) for n in source_names],device=env.device)
+                    to_native = torch.tensor([source_names.index(n) for n in robot.joint_names],device=env.device)
+                    assert torch.equal(to_source[to_native],torch.arange(29,device=env.device))
+                    def official_policy(obs):
+                        parts = [obs[:,:72]]
+                        for offset in (72,304,536):
+                            parts.append(obs[:,offset:offset+232].reshape(-1,8,29)[:,:,to_source].flatten(1))
+                        parts.append(obs[:,768:])
+                        return official_model.act_inference(torch.cat(parts,dim=1))[:,to_native]
+                    policies['official'] = official_policy
+                    protocol['official_checkpoint'] = str(args.official_checkpoint)
+                    protocol['official_checkpoint_sha256'] = hashlib.sha256(args.official_checkpoint.read_bytes()).hexdigest()
+                    protocol['note'] = 'Trained Lab3 and official InstinctLab checkpoints evaluated in one Newton scene with joint-name mapping.'
+                    (log/'protocol.json').write_text(json.dumps(protocol,indent=2))
+                else:
+                    official = OfficialStairPolicy(robot.joint_names,env.device)
+                    (log/'adapter_validation.json').write_text(json.dumps(official.validation,indent=2))
+                    policies['official'] = official
             cmd = env.command_manager.get_term('base_velocity')
             fixed_targets = cmd.valid_targets[terrain.terrain_levels,terrain.terrain_types]
             score = fixed_targets[:,:,0] - .2*(fixed_targets[:,:,1]-terrain.env_origins[:,None,1]).abs()
@@ -138,7 +163,8 @@ def main():
                         env._depth_step = -1
                         obs, _ = wrapped.get_observations()
                         initial = torch.cat([robot.data.root_pos_w.torch,robot.data.root_quat_w.torch,
-                                             robot.data.joint_pos.torch,goals],dim=1).cpu().numpy()
+                                             robot.data.root_lin_vel_w.torch,robot.data.root_ang_vel_w.torch,
+                                             robot.data.joint_pos.torch,robot.data.joint_vel.torch,goals],dim=1).cpu().numpy()
                         signature = hashlib.sha256(initial.tobytes()).hexdigest()
                         if wave in initial_signatures:
                             assert initial_signatures[wave] == signature, 'Unpaired initial states'
